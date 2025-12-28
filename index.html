@@ -3,21 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Jardín OS v5.8</title>
+    <title>Jardín OS v5.9</title>
+    
+    <!-- === MODO PANTALLA COMPLETA === -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Manifiesto embebido para forzar pantalla completa en Android -->
+    <link rel="manifest" href='data:application/manifest+json,{ "name": "Jardin OS", "short_name": "Jardin", "start_url": ".", "display": "standalone", "background_color": "#064e3b", "theme_color": "#064e3b", "orientation": "portrait" }' />
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body { -webkit-tap-highlight-color: transparent; touch-action: manipulation; font-family: system-ui, sans-serif; overscroll-behavior-y: none; }
         .completed-text { text-decoration: line-through; color: #9ca3af; }
+        
+        /* Ajuste para Notch/Barra Estado */
         header { padding-top: env(safe-area-inset-top); }
         .bottom-safe-area { padding-bottom: env(safe-area-inset-bottom); }
         
         /* Temas Dinámicos */
-        .theme-centro { --primary: #064e3b; --accent: #059669; --bg-btn: #064e3b; --light: #d1fae5; } 
-        .theme-ejemplares { --primary: #312e81; --accent: #4338ca; --bg-btn: #312e81; --light: #e0e7ff; } 
+        .theme-centro { --primary: #064e3b; --accent: #059669; --light: #d1fae5; } 
+        .theme-ejemplares { --primary: #312e81; --accent: #4338ca; --light: #e0e7ff; } 
         
         .tab-active { border-bottom: 3px solid #bef264; opacity: 1; color: white; }
         .tab-inactive { border-bottom: 3px solid transparent; opacity: 0.6; color: #e5e7eb; }
@@ -29,13 +36,16 @@
         .mic-active { animation: pulse-red 1.5s infinite; background-color: #ef4444 !important; transform: scale(1.1); }
         @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
         
+        /* Reproductor de Audio Custom */
+        .audio-player { height: 40px; width: 100%; min-width: 200px; margin-top: 5px; border-radius: 20px; }
+
         .cyclic-badge { font-size: 0.6rem; background: #78716c; color: white; padding: 2px 6px; border-radius: 99px; display: inline-flex; align-items: center; gap: 2px; }
         .note-internal { background-color: #fefce8; border-color: #fef08a; } 
         .note-billing { background-color: #ffedd5; border-color: #fdba74; }
         .badge-billing { background-color: #ea580c; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 4px; }
     </style>
 </head>
-<body id="appBody" class="bg-stone-100 min-h-screen pb-40 text-stone-800 select-none flex flex-col theme-centro transition-colors duration-500">
+<body id="appBody" class="bg-stone-100 min-h-screen pb-0 text-stone-800 select-none flex flex-col theme-centro transition-colors duration-500">
 
     <!-- Header -->
     <header id="mainHeader" class="shadow-lg sticky top-0 z-30 transition-colors duration-500" style="background-color: var(--primary);">
@@ -58,32 +68,35 @@
                 </button>
             </div>
             
-            <div class="flex text-xs font-bold uppercase tracking-wider mt-4 overflow-x-auto">
-                <button onclick="switchView('tasks')" id="tab-tasks" class="flex-1 pb-3 text-center tab-active min-w-[60px]">Tareas</button>
-                <button onclick="switchView('delivery')" id="tab-delivery" class="flex-1 pb-3 text-center tab-inactive min-w-[60px]">Repartos</button>
-                <button onclick="switchView('notes')" id="tab-notes" class="flex-1 pb-3 text-center tab-inactive min-w-[60px]">Notas</button>
-                <button onclick="switchView('stock')" id="tab-stock" class="flex-1 pb-3 text-center tab-inactive min-w-[60px]">Stock</button>
-                <button onclick="switchView('chat')" id="tab-chat" class="flex-1 pb-3 text-center tab-inactive min-w-[60px]"><i class="fas fa-broadcast-tower"></i> Radio</button>
+            <div class="flex text-xs font-bold uppercase tracking-wider mt-4 overflow-x-auto no-scrollbar">
+                <button onclick="switchView('tasks')" id="tab-tasks" class="flex-1 pb-3 text-center tab-active min-w-[65px]">Tareas</button>
+                <button onclick="switchView('delivery')" id="tab-delivery" class="flex-1 pb-3 text-center tab-inactive min-w-[65px]">Repartos</button>
+                <button onclick="switchView('notes')" id="tab-notes" class="flex-1 pb-3 text-center tab-inactive min-w-[65px]">Notas</button>
+                <button onclick="switchView('stock')" id="tab-stock" class="flex-1 pb-3 text-center tab-inactive min-w-[65px]">Stock</button>
+                <button onclick="switchView('chat')" id="tab-chat" class="flex-1 pb-3 text-center tab-inactive min-w-[65px]"><i class="fas fa-broadcast-tower"></i> Radio</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content con Swipe Detection -->
-    <main id="mainContainer" class="flex-grow p-4 max-w-lg mx-auto w-full relative touch-pan-y">
+    <!-- Main Content -->
+    <main id="mainContainer" class="flex-grow p-4 max-w-lg mx-auto w-full relative touch-pan-y overflow-hidden h-full">
         
         <!-- VISTA TAREAS -->
-        <div id="tasksView" class="view-section">
-            <div id="taskListContainer" class="pb-20 space-y-3"></div>
+        <div id="tasksView" class="view-section h-full overflow-y-auto pb-24">
+            <div id="taskListContainer" class="space-y-3"></div>
         </div>
 
-        <!-- VISTA REPARTOS -->
-        <div id="deliveryView" class="view-section hidden">
-            <div id="deliveryListContainer" class="pb-20 space-y-4"></div>
+        <!-- VISTA REPARTOS (UNIFICADA) -->
+        <div id="deliveryView" class="view-section hidden h-full overflow-y-auto pb-24">
+            <div class="bg-blue-100 text-blue-800 text-xs p-2 rounded mb-3 text-center font-bold border border-blue-200">
+                <i class="fas fa-info-circle"></i> Lista Unificada (Todas las Sucursales)
+            </div>
+            <div id="deliveryListContainer" class="space-y-4"></div>
         </div>
 
         <!-- VISTA NOTAS -->
-        <div id="notesView" class="view-section hidden">
-            <div id="notesListContainer" class="grid gap-4 pb-20"></div>
+        <div id="notesView" class="view-section hidden h-full overflow-y-auto pb-24">
+            <div id="notesListContainer" class="grid gap-4"></div>
         </div>
         
         <!-- VISTA STOCK -->
@@ -94,16 +107,23 @@
         </div>
 
         <!-- VISTA CHAT -->
-        <div id="chatView" class="view-section hidden h-full flex flex-col">
-            <div id="chatContainer" class="flex-grow overflow-y-auto pb-28 space-y-2 flex flex-col p-2"></div>
-            <div class="fixed bottom-24 left-0 w-full px-4 max-w-lg mx-auto left-0 right-0 z-50">
-                <div class="bg-white rounded-full shadow-2xl border border-stone-200 p-2 flex items-center gap-2">
-                    <label class="p-3 text-stone-500 hover:text-emerald-600 cursor-pointer">
+        <div id="chatView" class="view-section hidden h-full flex flex-col relative">
+            <div id="chatContainer" class="flex-grow overflow-y-auto pb-20 space-y-2 flex flex-col p-2"></div>
+            
+            <!-- Controles Chat (Bajados al fondo) -->
+            <div class="absolute bottom-4 left-0 w-full px-2 z-50">
+                <div class="bg-white rounded-full shadow-2xl border border-stone-300 p-2 flex items-center gap-2">
+                    <!-- Botón Imagen -->
+                    <label class="p-3 text-stone-500 hover:text-emerald-600 cursor-pointer active:scale-90 transition-transform">
                         <i class="fas fa-camera text-xl"></i>
-                        <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="uploadImage()">
+                        <input type="file" id="imageInput" accept="image/*" class="hidden">
                     </label>
-                    <input type="text" id="chatInput" placeholder="Mensaje..." class="flex-grow bg-transparent outline-none text-sm px-2">
-                    <button onclick="sendTextMessage()" class="text-stone-600 p-2 font-bold text-sm"><i class="fas fa-paper-plane"></i></button>
+                    
+                    <input type="text" id="chatInput" placeholder="Mensaje..." class="flex-grow bg-transparent outline-none text-sm px-2 h-10">
+                    
+                    <button onclick="sendTextMessage()" class="text-stone-600 p-3 font-bold text-sm hover:text-emerald-600"><i class="fas fa-paper-plane text-lg"></i></button>
+                    
+                    <!-- Botón Audio -->
                     <button id="micBtn" 
                         onmousedown="startRecording()" onmouseup="stopRecording()" 
                         ontouchstart="startRecording(event)" ontouchend="stopRecording(event)"
@@ -112,28 +132,29 @@
                         <i class="fas fa-microphone text-lg"></i>
                     </button>
                 </div>
-                <div id="recordingStatus" class="text-center text-xs font-bold text-red-500 mt-2 h-4 opacity-0 transition-opacity bg-white/80 rounded px-2 inline-block mx-auto w-full">
-                    TRANSMITIENDO...
+                <!-- Indicador de Grabación -->
+                <div id="recordingStatus" class="absolute -top-8 left-0 right-0 text-center pointer-events-none opacity-0 transition-opacity">
+                    <span class="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-pulse">GRABANDO...</span>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Botonera Inferior -->
+    <!-- Botonera Inferior (Nuevo) -->
     <div id="mainControls" class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur border-t border-stone-200 p-3 shadow-lg z-40 flex gap-3 justify-center bottom-safe-area">
         <button onclick="handleMainAction()" class="text-white p-3 rounded-xl shadow-md flex-1 font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform" style="background-color: var(--accent);">
             <i class="fas fa-plus"></i> <span id="mainBtnText">Nuevo</span>
         </button>
     </div>
 
-    <!-- Modales -->
+    <!-- Modales (Sin cambios visuales mayores) -->
     <div id="addTaskModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-2xl shadow-xl overflow-hidden p-5 space-y-4">
             <h2 class="font-bold text-lg" style="color: var(--primary);">Nueva Tarea</h2>
-            <input type="text" id="newTaskInput" class="w-full p-2 border-b-2 border-stone-200 outline-none focus:border-emerald-500" placeholder="Descripción...">
-            <input type="text" id="newTaskAssignee" class="w-full p-2 border-b-2 border-stone-200 outline-none focus:border-emerald-500" placeholder="Responsable">
+            <input type="text" id="newTaskInput" class="w-full p-2 border-b-2 border-stone-200 outline-none" placeholder="Descripción...">
+            <input type="text" id="newTaskAssignee" class="w-full p-2 border-b-2 border-stone-200 outline-none" placeholder="Responsable">
             <div class="flex items-center justify-between bg-stone-50 p-3 rounded-lg">
-                <span class="text-sm font-medium text-stone-700">¿Es Cíclica/Fija?</span>
+                <span class="text-sm font-medium text-stone-700">¿Es Cíclica?</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" id="newTaskCyclic" class="sr-only peer">
                     <div class="w-11 h-6 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:bg-emerald-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
@@ -146,7 +167,7 @@
                 <button onclick="selectPriority('low')" class="p-2 bg-emerald-100 text-emerald-700 rounded prio-btn ring-2 ring-emerald-500" id="btn-low">BAJ</button>
             </div>
             <div class="flex gap-3 pt-2">
-                <button onclick="closeModal('addTaskModal')" class="flex-1 py-3 text-stone-500 bg-stone-100 rounded-lg font-bold">Cancelar</button>
+                <button onclick="closeModal('addTaskModal')" class="flex-1 py-3 text-stone-500 bg-stone-100 rounded-lg">Cancelar</button>
                 <button onclick="addNewTask()" class="flex-1 py-3 text-white rounded-lg shadow font-bold" style="background-color: var(--primary);">Guardar</button>
             </div>
         </div>
@@ -155,15 +176,15 @@
     <div id="addDeliveryModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-2xl shadow-xl overflow-hidden p-5 space-y-3">
             <h2 class="font-bold text-lg" style="color: var(--primary);">Nuevo Reparto</h2>
-            <input type="text" id="delClient" class="w-full p-2 border-b outline-none" placeholder="Nombre Cliente">
+            <input type="text" id="delClient" class="w-full p-2 border-b outline-none" placeholder="Cliente">
             <input type="tel" id="delPhone" class="w-full p-2 border-b outline-none" placeholder="Teléfono">
-            <textarea id="delItems" class="w-full p-2 border-b outline-none h-20 resize-none" placeholder="¿Qué lleva el pedido?"></textarea>
+            <textarea id="delItems" class="w-full p-2 border-b outline-none h-20 resize-none" placeholder="Pedido..."></textarea>
             <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="delWhen" class="p-2 border-b outline-none text-sm" placeholder="¿Para Cuándo?">
-                <input type="text" id="delWhere" class="p-2 border-b outline-none text-sm" placeholder="Dirección / Zona">
+                <input type="text" id="delWhen" class="p-2 border-b outline-none text-sm" placeholder="Cuándo">
+                <input type="text" id="delWhere" class="p-2 border-b outline-none text-sm" placeholder="Dónde">
             </div>
             <div class="flex gap-3 pt-4">
-                <button onclick="closeModal('addDeliveryModal')" class="flex-1 py-3 text-stone-500 bg-stone-100 rounded-lg font-bold">Cancelar</button>
+                <button onclick="closeModal('addDeliveryModal')" class="flex-1 py-3 text-stone-500 bg-stone-100 rounded-lg">Cancelar</button>
                 <button onclick="addNewDelivery()" class="flex-1 py-3 text-white rounded-lg shadow font-bold" style="background-color: var(--primary);">Agendar</button>
             </div>
         </div>
@@ -172,14 +193,11 @@
     <div id="addNoteModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-2xl shadow-xl p-4 bg-yellow-50 border border-yellow-200">
              <h2 class="font-bold text-lg text-yellow-800 mb-2">Nueva Nota</h2>
-             <div class="mb-3">
-                 <label class="text-xs font-bold text-yellow-800 uppercase block mb-1">Tipo</label>
-                 <select id="newNoteType" class="w-full p-2 rounded bg-yellow-100 border border-yellow-300 text-yellow-900 text-sm outline-none">
-                     <option value="internal">📌 Comunicación Interna</option>
-                     <option value="billing">💰 Cola de Cobro</option>
-                 </select>
-             </div>
-             <textarea id="newNoteInput" rows="5" class="w-full bg-transparent outline-none text-stone-700" placeholder="Escribir detalles..."></textarea>
+             <select id="newNoteType" class="w-full p-2 mb-3 rounded bg-yellow-100 border border-yellow-300 text-yellow-900 text-sm outline-none">
+                 <option value="internal">📌 Comunicación Interna</option>
+                 <option value="billing">💰 Cola de Cobro</option>
+             </select>
+             <textarea id="newNoteInput" rows="5" class="w-full bg-transparent outline-none text-stone-700" placeholder="Escribir..."></textarea>
              <div class="flex justify-end gap-2 mt-4">
                  <button onclick="closeModal('addNoteModal')" class="text-stone-400 px-4 py-2">Cancelar</button>
                  <button onclick="addNewNote()" class="bg-yellow-400 text-yellow-900 px-6 py-2 rounded-lg font-bold shadow">Pegar</button>
@@ -194,7 +212,6 @@
         import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // CONFIGURACIÓN (TUS CLAVES)
         const manualConfig = {
             apiKey: "AIzaSyBzPiBCgiHoHSp24U7739fj9-htyTA8KiU",
             authDomain: "app-jardin-v4.firebaseapp.com",
@@ -210,7 +227,7 @@
         const storage = getStorage(app);
         const APP_ID = 'jardin-os-v5';
 
-        enableIndexedDbPersistence(db).catch(err => console.log("Persistencia no disp.", err.code));
+        enableIndexedDbPersistence(db).catch(err => console.log("Persistencia:", err.code));
 
         let currentBranch = localStorage.getItem('tao_branch') || 'centro';
         let currentView = 'tasks';
@@ -219,8 +236,10 @@
         let wakeLock = null;
         let unsubTasks, unsubDeliveries, unsubNotes, unsubChat;
         let mediaRecorder, audioChunks = [], isRecording = false;
+        
+        // Listener para imagen
+        document.getElementById('imageInput').addEventListener('change', uploadImage);
 
-        // VISTAS ORDENADAS PARA EL SWIPE
         const VIEWS_ORDER = ['tasks', 'delivery', 'notes', 'stock', 'chat'];
         let touchStartX = 0;
 
@@ -241,30 +260,19 @@
             window.addEventListener('offline', () => document.getElementById('offlineIndicator').classList.remove('hidden'));
         }
 
-        // === SWIPE LOGIC ===
         function setupSwipe() {
             const container = document.getElementById('mainContainer');
-            container.addEventListener('touchstart', e => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, {passive: true});
-            
+            container.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
             container.addEventListener('touchend', e => {
-                const touchEndX = e.changedTouches[0].screenX;
-                const diff = touchStartX - touchEndX;
-                
-                // Umbral de 50px para considerar swipe
+                const diff = touchStartX - e.changedTouches[0].screenX;
                 if (Math.abs(diff) > 50) {
                     const currentIndex = VIEWS_ORDER.indexOf(currentView);
-                    if (diff > 0) { // Swipe Izquierda -> Siguiente
-                        if (currentIndex < VIEWS_ORDER.length - 1) switchView(VIEWS_ORDER[currentIndex + 1]);
-                    } else { // Swipe Derecha -> Anterior
-                        if (currentIndex > 0) switchView(VIEWS_ORDER[currentIndex - 1]);
-                    }
+                    if (diff > 0 && currentIndex < VIEWS_ORDER.length - 1) switchView(VIEWS_ORDER[currentIndex + 1]);
+                    else if (diff < 0 && currentIndex > 0) switchView(VIEWS_ORDER[currentIndex - 1]);
                 }
             }, {passive: true});
         }
 
-        // === LOGICA SUCURSALES ===
         window.toggleBranch = function() {
             currentBranch = currentBranch === 'centro' ? 'ejemplares' : 'centro';
             localStorage.setItem('tao_branch', currentBranch);
@@ -286,32 +294,26 @@
             }
         }
 
-        // === PRIORIDAD NUMERICA PARA ORDENAMIENTO ===
         const PRIORITY_VAL = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
 
         function subscribeToBranch(branch) {
             if(unsubTasks) unsubTasks(); if(unsubDeliveries) unsubDeliveries(); if(unsubNotes) unsubNotes(); if(unsubChat) unsubChat();
             
-            // CORRECCION: Agregado 'branches' para asegurar numero impar de segmentos
-            // artifacts/jardin-os-v5/branches/centro/...
             const basePath = ['artifacts', APP_ID, 'branches', branch];
-            
-            // TAREAS (AUTO-ORDENADAS)
+            const sharedPath = ['artifacts', APP_ID, 'SHARED_DATA', 'deliveries']; // RUTA UNIFICADA
+
+            // TAREAS
             unsubTasks = onSnapshot(collection(db, ...basePath, 'tasks'), (snap) => {
                 const list = document.getElementById('taskListContainer'); list.innerHTML = '';
-                if(snap.empty) { list.innerHTML = `<div class="text-center p-8 opacity-40"><i class="fas fa-check-circle text-4xl mb-2"></i><br>Sin tareas pendientes</div>`; return; }
-                
+                if(snap.empty) { list.innerHTML = `<div class="text-center p-8 opacity-40"><i class="fas fa-check-circle text-4xl mb-2"></i><br>Sin tareas</div>`; return; }
                 let tasks = [];
                 snap.forEach(doc => tasks.push({id: doc.id, ...doc.data()}));
-                
-                // ORDENAR: 1. Prioridad (Menor valor es mayor urgencia) 2. Fecha (Más nuevo arriba)
                 tasks.sort((a, b) => {
                     const pA = PRIORITY_VAL[a.priority] ?? 3;
                     const pB = PRIORITY_VAL[b.priority] ?? 3;
                     if (pA !== pB) return pA - pB;
                     return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
                 });
-
                 tasks.forEach(t => {
                     const styles = getPriorityStyles(t.priority);
                     const el = document.createElement('div');
@@ -322,15 +324,15 @@
                 });
             });
 
-            // REPARTOS
-            unsubDeliveries = onSnapshot(query(collection(db, ...basePath, 'deliveries'), orderBy('createdAt', 'desc')), (snap) => {
+            // REPARTOS (COMPARTIDOS)
+            unsubDeliveries = onSnapshot(query(collection(db, ...sharedPath), orderBy('createdAt', 'desc')), (snap) => {
                 const list = document.getElementById('deliveryListContainer'); list.innerHTML = '';
                 if(snap.empty) { list.innerHTML = `<div class="text-center p-8 opacity-40"><i class="fas fa-truck text-4xl mb-2"></i><br>Sin repartos</div>`; return; }
                 snap.forEach(doc => {
                     const d = doc.data(); const isDone = d.status === 'delivered';
                     const el = document.createElement('div');
                     el.className = `bg-white rounded-xl shadow-sm border border-stone-200 p-4 relative ${isDone ? 'opacity-60 bg-stone-50' : ''}`;
-                    el.innerHTML = `<div class="flex justify-between items-start mb-2"><div><h3 class="font-bold text-stone-800 text-lg">${d.client}</h3><a href="tel:${d.phone}" class="text-emerald-600 text-sm font-bold flex items-center gap-1"><i class="fas fa-phone-alt"></i> ${d.phone}</a></div><button onclick="toggleDelivery('${doc.id}', '${d.status}')" class="px-3 py-1 rounded-full text-xs font-bold ${isDone ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-500'}">${isDone ? 'ENTREGADO' : 'PENDIENTE'}</button></div><div class="bg-stone-50 p-2 rounded text-sm text-stone-700 mb-3 italic">"${d.items}"</div><div class="flex justify-between items-end text-xs text-stone-500 border-t pt-2"><div><p><i class="far fa-clock"></i> ${d.when}</p><a href="https://maps.google.com/?q=${d.where}" target="_blank" class="text-blue-600 underline mt-1 block"><i class="fas fa-map-marker-alt"></i> ${d.where}</a></div><button onclick="deleteDocItem('deliveries','${doc.id}')" class="text-stone-300 hover:text-red-500"><i class="fas fa-trash"></i></button></div>`;
+                    el.innerHTML = `<div class="flex justify-between items-start mb-2"><div><h3 class="font-bold text-stone-800 text-lg">${d.client}</h3><a href="tel:${d.phone}" class="text-emerald-600 text-sm font-bold flex items-center gap-1"><i class="fas fa-phone-alt"></i> ${d.phone}</a></div><button onclick="toggleDelivery('${doc.id}', '${d.status}')" class="px-3 py-1 rounded-full text-xs font-bold ${isDone ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-500'}">${isDone ? 'ENTREGADO' : 'PENDIENTE'}</button></div><div class="bg-stone-50 p-2 rounded text-sm text-stone-700 mb-3 italic">"${d.items}"</div><div class="flex justify-between items-end text-xs text-stone-500 border-t pt-2"><div><p><i class="far fa-clock"></i> ${d.when}</p><a href="https://maps.google.com/?q=${d.where}" target="_blank" class="text-blue-600 underline mt-1 block"><i class="fas fa-map-marker-alt"></i> ${d.where}</a></div><button onclick="deleteDocItem('deliveries','${doc.id}', true)" class="text-stone-300 hover:text-red-500"><i class="fas fa-trash"></i></button></div>`;
                     list.appendChild(el);
                 });
             });
@@ -339,12 +341,10 @@
             unsubNotes = onSnapshot(query(collection(db, ...basePath, 'notes'), orderBy('createdAt', 'desc')), (snap) => {
                 const list = document.getElementById('notesListContainer'); list.innerHTML = '';
                 snap.forEach(doc => {
-                    const n = doc.data();
-                    const noteType = n.type || 'internal';
-                    const themeClass = noteType === 'billing' ? 'note-billing' : 'note-internal';
+                    const n = doc.data(); const themeClass = n.type === 'billing' ? 'note-billing' : 'note-internal';
                     const el = document.createElement('div');
                     el.className = `p-4 rounded-xl shadow-sm border relative ${themeClass}`;
-                    el.innerHTML = `${noteType === 'billing' ? '<span class="badge-billing"><i class="fas fa-money-bill-wave"></i> COLA DE COBRO</span>' : ''}<p class="whitespace-pre-wrap text-stone-800 font-handwriting">${n.content}</p><button onclick="deleteDocItem('notes','${doc.id}')" class="absolute top-2 right-2 text-yellow-700 hover:text-red-500 opacity-50"><i class="fas fa-times"></i></button>`;
+                    el.innerHTML = `${n.type === 'billing' ? '<span class="badge-billing"><i class="fas fa-money-bill-wave"></i> COLA DE COBRO</span>' : ''}<p class="whitespace-pre-wrap text-stone-800 font-handwriting">${n.content}</p><button onclick="deleteDocItem('notes','${doc.id}')" class="absolute top-2 right-2 text-yellow-700 hover:text-red-500 opacity-50"><i class="fas fa-times"></i></button>`;
                     list.appendChild(el);
                 });
             });
@@ -352,14 +352,22 @@
             // CHAT
             unsubChat = onSnapshot(query(collection(db, ...basePath, 'chat'), orderBy('createdAt', 'asc'), limit(50)), (snap) => {
                 const container = document.getElementById('chatContainer');
-                snap.docChanges().forEach((change) => { if (change.type === "added") { const msg = change.doc.data(); if(msg.type === 'audio' && msg.sender !== currentUser.uid) { const now = Date.now(); const msgTime = msg.createdAt ? msg.createdAt.toMillis() : now; if (now - msgTime < 30000) playAudioAuto(msg.url); } } });
+                snap.docChanges().forEach((change) => { 
+                    if (change.type === "added") { 
+                        const msg = change.doc.data(); 
+                        if(msg.type === 'audio' && msg.sender !== currentUser.uid) { 
+                            const now = Date.now(); 
+                            if (now - (msg.createdAt?.toMillis() || 0) < 30000) playAudioAuto(msg.url); 
+                        } 
+                    } 
+                });
                 container.innerHTML = '<div class="text-center text-xs text-stone-400 mt-4">Frecuencia Abierta</div>';
                 snap.forEach(doc => {
                     const msg = doc.data(); const isMe = msg.sender === currentUser.uid;
                     const div = document.createElement('div'); div.className = `msg-bubble ${isMe ? 'msg-me' : 'msg-other'} shadow-sm`;
                     if(msg.type === 'text') div.innerHTML = `<p class="text-sm">${msg.text}</p>`;
                     if(msg.type === 'image') div.innerHTML = `<img src="${msg.url}" class="rounded-lg border border-stone-200">`;
-                    if(msg.type === 'audio') div.innerHTML = `<div class="flex items-center gap-2"><i class="fas fa-play-circle text-2xl opacity-50"></i> <audio controls src="${msg.url}" class="h-8 w-40"></audio></div>`;
+                    if(msg.type === 'audio') div.innerHTML = `<div class="flex items-center gap-2"><audio controls class="audio-player" src="${msg.url}"></audio></div>`;
                     const time = msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
                     div.innerHTML += `<div class="text-[9px] text-right mt-1 opacity-40">${time}</div>`;
                     container.appendChild(div);
@@ -368,12 +376,11 @@
             });
         }
 
-        // === UTILIDADES ===
         window.switchView = function(view) {
             currentView = view;
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.getElementById(view + 'View').classList.remove('hidden');
-            ['tasks','notes','stock','chat','delivery'].forEach(v => { document.getElementById('tab-'+v).className = v===view ? "flex-1 pb-3 text-center tab-active min-w-[60px]" : "flex-1 pb-3 text-center tab-inactive min-w-[60px]"; });
+            ['tasks','notes','stock','chat','delivery'].forEach(v => { document.getElementById('tab-'+v).className = v===view ? "flex-1 pb-3 text-center tab-active min-w-[65px]" : "flex-1 pb-3 text-center tab-inactive min-w-[65px]"; });
             const controls = document.getElementById('mainControls');
             if(view === 'chat' || view === 'stock') controls.classList.add('hidden');
             else { controls.classList.remove('hidden'); const btnText = document.getElementById('mainBtnText'); if(view === 'delivery') btnText.innerText = 'Reparto'; else if(view === 'notes') btnText.innerText = 'Nota'; else btnText.innerText = 'Tarea'; }
@@ -381,21 +388,65 @@
 
         function checkAutoResetDay() { const todayStr = new Date().toDateString(); const lastRun = localStorage.getItem('tao_last_run_date'); if (lastRun !== todayStr) { localStorage.setItem('tao_last_run_date', todayStr); } }
 
-        // CRUDs (Con basepath corregido)
         window.addNewNote = async function() { const content = document.getElementById('newNoteInput').value; const type = document.getElementById('newNoteType').value; if(!content) return; const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'notes']; await addDoc(collection(db, ...basePath), { content, type, createdAt: serverTimestamp() }); closeModal('addNoteModal'); document.getElementById('newNoteInput').value = ''; }
-        window.addNewDelivery = async function() { const client = document.getElementById('delClient').value; const phone = document.getElementById('delPhone').value; const items = document.getElementById('delItems').value; const when = document.getElementById('delWhen').value; const where = document.getElementById('delWhere').value; if(!client || !items) return alert("Faltan datos"); const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'deliveries']; await addDoc(collection(db, ...basePath), { client, phone, items, when, where, status: 'pending', createdAt: serverTimestamp() }); closeModal('addDeliveryModal'); document.getElementById('delClient').value = ''; document.getElementById('delPhone').value = ''; document.getElementById('delItems').value = ''; }
-        window.toggleDelivery = async function(id, currentStatus) { const newStatus = currentStatus === 'pending' ? 'delivered' : 'pending'; const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'deliveries']; await updateDoc(doc(db, ...basePath, id), { status: newStatus }); }
+        
+        // REPARTOS (RUTA COMPARTIDA)
+        window.addNewDelivery = async function() { 
+            const client = document.getElementById('delClient').value; const phone = document.getElementById('delPhone').value; const items = document.getElementById('delItems').value; const when = document.getElementById('delWhen').value; const where = document.getElementById('delWhere').value; 
+            if(!client || !items) return alert("Faltan datos"); 
+            const sharedPath = ['artifacts', APP_ID, 'SHARED_DATA', 'deliveries'];
+            await addDoc(collection(db, ...sharedPath), { client, phone, items, when, where, status: 'pending', createdAt: serverTimestamp() }); 
+            closeModal('addDeliveryModal'); document.getElementById('delClient').value = ''; document.getElementById('delPhone').value = ''; document.getElementById('delItems').value = ''; 
+        }
+        
+        window.toggleDelivery = async function(id, currentStatus) { 
+            const newStatus = currentStatus === 'pending' ? 'delivered' : 'pending'; 
+            const sharedPath = ['artifacts', APP_ID, 'SHARED_DATA', 'deliveries'];
+            await updateDoc(doc(db, ...sharedPath, id), { status: newStatus }); 
+        }
+
         window.addNewTask = async function() { const text = document.getElementById('newTaskInput').value.trim(); const assignee = document.getElementById('newTaskAssignee').value.trim(); const isCyclic = document.getElementById('newTaskCyclic').checked; if(!text) return; const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'tasks']; await addDoc(collection(db, ...basePath), { text, assignee, priority: selectedPriority, isCyclic, checkedDay: false, checkedTotal: false, createdAt: serverTimestamp() }); closeModal('addTaskModal'); document.getElementById('newTaskInput').value = ''; }
         window.toggleDay = async function(id, currentVal) { const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'tasks']; await updateDoc(doc(db, ...basePath, id), { checkedDay: !currentVal }); }
-        window.deleteDocItem = async function(coll, id) { if(confirm("¿Eliminar?")) { const basePath = ['artifacts', APP_ID, 'branches', currentBranch, coll]; await deleteDoc(doc(db, ...basePath, id)); } }
         
-        // Chat fns (Con basepath corregido)
-        window.startRecording = async function(e) { if(e) e.preventDefault(); if(isRecording) return; try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); mediaRecorder = new MediaRecorder(stream); audioChunks = []; mediaRecorder.ondataavailable = event => audioChunks.push(event.data); mediaRecorder.onstop = async () => { const audioBlob = new Blob(audioChunks, { type: 'audio/mp4' }); uploadAudio(audioBlob); }; mediaRecorder.start(); isRecording = true; document.getElementById('recordingStatus').style.opacity = '1'; } catch (err) { alert("Mic Error: " + err.message); } }
+        window.deleteDocItem = async function(coll, id, isShared=false) { 
+            if(confirm("¿Eliminar?")) { 
+                const path = isShared ? ['artifacts', APP_ID, 'SHARED_DATA', 'deliveries'] : ['artifacts', APP_ID, 'branches', currentBranch, coll];
+                await deleteDoc(doc(db, ...path, id)); 
+            } 
+        }
+        
+        // AUDIO & FOTOS (FIXED)
+        window.startRecording = async function(e) { if(e) e.preventDefault(); if(isRecording) return; try { const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' }); audioChunks = []; mediaRecorder.ondataavailable = event => audioChunks.push(event.data); mediaRecorder.onstop = async () => { const audioBlob = new Blob(audioChunks, { type: 'audio/webm' }); uploadAudio(audioBlob); }; mediaRecorder.start(); isRecording = true; document.getElementById('recordingStatus').style.opacity = '1'; } catch (err) { alert("Mic Error: " + err.message); } }
         window.stopRecording = function(e) { if(e) e.preventDefault(); if(!isRecording) return; mediaRecorder.stop(); isRecording = false; document.getElementById('recordingStatus').style.opacity = '0'; }
-        async function uploadAudio(blob) { const fileName = `audios/${Date.now()}.mp4`; const storageRef = ref(storage, fileName); const snap = await uploadBytes(storageRef, blob); const url = await getDownloadURL(snap.ref); const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'chat']; await addDoc(collection(db, ...basePath), { type: 'audio', url, sender: currentUser.uid, createdAt: serverTimestamp() }); }
+        
+        async function uploadAudio(blob) { 
+            const fileName = `audios/${Date.now()}.webm`; 
+            const storageRef = ref(storage, fileName); 
+            try {
+                const snap = await uploadBytes(storageRef, blob); 
+                const url = await getDownloadURL(snap.ref); 
+                const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'chat']; 
+                await addDoc(collection(db, ...basePath), { type: 'audio', url, sender: currentUser.uid, createdAt: serverTimestamp() }); 
+            } catch(e) { alert("Error subiendo audio"); console.error(e); }
+        }
+        
+        async function uploadImage() { 
+             const file = document.getElementById('imageInput').files[0]; 
+             if(!file) return; 
+             const fileName = `images/${Date.now()}_${file.name}`; 
+             const storageRef = ref(storage, fileName); 
+             try {
+                 const snap = await uploadBytes(storageRef, file); 
+                 const url = await getDownloadURL(snap.ref); 
+                 const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'chat']; 
+                 await addDoc(collection(db, ...basePath), { type: 'image', url, sender: currentUser.uid, createdAt: serverTimestamp() }); 
+             } catch(e) { alert("Error imagen: " + e.message); }
+        }
+
         window.sendTextMessage = async function() { const input = document.getElementById('chatInput'); const text = input.value.trim(); if(!text) return; const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'chat']; await addDoc(collection(db, ...basePath), { type: 'text', text, sender: currentUser.uid, createdAt: serverTimestamp() }); input.value = ''; }
-        window.uploadImage = async function() { const file = document.getElementById('imageInput').files[0]; if(!file) return; const fileName = `images/${Date.now()}_${file.name}`; const storageRef = ref(storage, fileName); const snap = await uploadBytes(storageRef, file); const url = await getDownloadURL(snap.ref); const basePath = ['artifacts', APP_ID, 'branches', currentBranch, 'chat']; await addDoc(collection(db, ...basePath), { type: 'image', url, sender: currentUser.uid, createdAt: serverTimestamp() }); }
+        
         function playAudioAuto(url) { const audio = new Audio(url); audio.play().catch(e => console.log("Auto-play bloqueado")); }
+        
         window.toggleWakeLock = async function() { if ('wakeLock' in navigator) { try { if(wakeLock) { wakeLock.release(); wakeLock = null; document.getElementById('wakeLockBtn').classList.remove('bg-white/20'); alert("Pantalla desbloqueada"); } else { wakeLock = await navigator.wakeLock.request('screen'); document.getElementById('wakeLockBtn').classList.add('bg-white/20'); alert("Pantalla Activa"); } } catch (err) { alert("Error: " + err.name); } } else alert("Navegador no soporta Wake Lock"); }
         window.handleMainAction = function() { if(currentView === 'notes') { document.getElementById('addNoteModal').classList.remove('hidden'); document.getElementById('newNoteInput').focus(); } else if (currentView === 'tasks') { document.getElementById('addTaskModal').classList.remove('hidden'); document.getElementById('newTaskInput').focus(); } else if (currentView === 'delivery') { document.getElementById('addDeliveryModal').classList.remove('hidden'); document.getElementById('delClient').focus(); } }
         window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
