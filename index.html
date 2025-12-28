@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Jardín OS v6.0</title>
+    <title>Jardín OS v6.1</title>
     
     <!-- Meta Tags PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,10 +27,10 @@
                     },
                     colors: {
                         brand: {
-                            centro: '#064e3b', // Emerald 900
-                            centroLight: '#10b981', // Emerald 500
-                            ejemplares: '#312e81', // Indigo 900
-                            ejemplaresLight: '#6366f1', // Indigo 500
+                            centro: '#064e3b',
+                            centroLight: '#10b981',
+                            ejemplares: '#312e81',
+                            ejemplaresLight: '#6366f1',
                         }
                     },
                     animation: {
@@ -57,15 +57,12 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
         
-        /* Ocultar barra de scroll pero permitir scroll */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Estilos dinámicos de tema */
         .theme-centro { --primary: #064e3b; --accent: #10b981; --bg-soft: #ecfdf5; }
         .theme-ejemplares { --primary: #312e81; --accent: #6366f1; --bg-soft: #eef2ff; }
 
-        /* Elementos específicos */
         .tab-active { color: var(--accent); border-bottom: 2px solid var(--accent); }
         .tab-inactive { color: #9ca3af; border-bottom: 2px solid transparent; }
         
@@ -76,7 +73,6 @@
         .mic-recording { animation: pulse-red 1.5s infinite; background-color: #ef4444 !important; transform: scale(1.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
         @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-        /* Toast Notifications */
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100; width: 90%; max-width: 350px; pointer-events: none; }
         .toast { background: rgba(30, 41, 59, 0.95); color: white; padding: 12px 16px; border-radius: 50px; margin-bottom: 8px; font-size: 0.9rem; text-align: center; backdrop-filter: blur(4px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); animation: fade-in-down 0.3s ease-out; pointer-events: auto; display: flex; align-items: center; justify-content: center; gap: 8px; }
         @keyframes fade-in-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -87,7 +83,6 @@
     <!-- === HEADER === -->
     <header id="mainHeader" class="shadow-md sticky top-0 z-30 transition-colors duration-500 bg-white pt-[env(safe-area-inset-top)]">
         <div class="px-4 pb-2 pt-3">
-            <!-- Top Row -->
             <div class="flex justify-between items-center mb-4">
                 <div class="flex items-center gap-3">
                     <div id="headerIcon" class="w-10 h-10 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-sm transition-colors duration-500" style="background-color: var(--primary);">
@@ -109,7 +104,6 @@
                 </button>
             </div>
 
-            <!-- Navigation Tabs -->
             <nav class="flex text-xs font-bold uppercase tracking-wide overflow-x-auto no-scrollbar gap-1">
                 <button data-view="tasks" class="nav-tab flex-1 pb-2 text-center tab-active min-w-[70px] transition-all">Tareas</button>
                 <button data-view="delivery" class="nav-tab flex-1 pb-2 text-center tab-inactive min-w-[70px] transition-all">Repartos</button>
@@ -128,7 +122,6 @@
         <!-- Vista: Tareas -->
         <div id="view-tasks" class="view-section h-full overflow-y-auto p-4 pb-24 scroll-smooth">
             <div id="taskList" class="space-y-3">
-                <!-- Skeletons -->
                 <div class="animate-pulse space-y-3 opacity-50">
                     <div class="h-20 bg-slate-200 rounded-xl"></div>
                     <div class="h-20 bg-slate-200 rounded-xl"></div>
@@ -155,14 +148,13 @@
                 <i class="fas fa-boxes text-4xl text-slate-400"></i>
             </div>
             <h2 class="text-xl font-bold text-slate-600">Gestión de Inventario</h2>
-            <p class="text-slate-400 text-sm mt-2 max-w-xs">Módulo en desarrollo. Próximamente integración con lector de códigos de barra.</p>
+            <p class="text-slate-400 text-sm mt-2 max-w-xs">Módulo en desarrollo.</p>
         </div>
 
         <!-- Vista: Chat/Radio -->
         <div id="view-chat" class="view-section hidden h-full flex flex-col relative bg-slate-100">
             <div id="chatList" class="flex-grow overflow-y-auto p-4 pb-20 space-y-2 flex flex-col"></div>
             
-            <!-- Barra de Chat -->
             <div class="absolute bottom-0 left-0 w-full p-3 bg-white border-t border-slate-200 pb-[env(safe-area-inset-bottom)] z-20">
                 <div class="flex items-end gap-2 max-w-2xl mx-auto">
                     <label class="p-3 text-slate-400 hover:text-emerald-600 cursor-pointer transition-colors">
@@ -179,7 +171,6 @@
                         <i class="fas fa-microphone text-lg"></i>
                     </button>
                 </div>
-                <!-- Status Grabación -->
                 <div id="recordingStatus" class="absolute -top-10 left-0 right-0 text-center pointer-events-none opacity-0 transition-all duration-300 transform translate-y-4">
                     <span class="bg-red-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md flex items-center justify-center gap-2 w-max mx-auto">
                         <i class="fas fa-circle text-[8px] animate-ping"></i> GRABANDO...
@@ -200,7 +191,6 @@
     <div id="toast-container"></div>
 
     <!-- === MODALS === -->
-    <!-- Modal Template Wrapper -->
     <div id="modalOverlay" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
         
         <!-- Modal Tarea -->
@@ -291,17 +281,16 @@
 
     <!-- === LOGIC === -->
     <script type="module">
-        // Importación modular de Firebase v9
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
         // ==========================================
-        // CONFIGURACIÓN (¡ATENCIÓN AQUÍ!)
+        // CONFIGURACIÓN FIREBASE
         // ==========================================
-        // En este entorno usamos la config automática.
-        // Para producción, descomenta 'manualConfig' y úsalo en initializeApp.
+        // Si usas esto fuera del editor online, descomenta 'manualConfig'
+        // y pon tus claves reales.
         
         /* const manualConfig = {
             apiKey: "TU_API_KEY",
@@ -310,31 +299,29 @@
             storageBucket: "TU_PROYECTO.firebasestorage.app",
             messagingSenderId: "TU_SENDER_ID",
             appId: "TU_APP_ID"
-        };
-        */
+        }; */
 
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const app = initializeApp(firebaseConfig); // Cambiar a manualConfig si se despliega fuera
-        
+        // Intento de carga automática o manual
+        let firebaseConfig = {};
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                firebaseConfig = JSON.parse(__firebase_config);
+            } else if (typeof manualConfig !== 'undefined') {
+                firebaseConfig = manualConfig;
+            }
+        } catch(e) { console.error("Error config", e); }
+
+        const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
         
-        // Usamos un ID dinámico para que funcione en la preview, 
-        // en prod puedes usar 'jardin-os-v5' fijo.
         const PREVIEW_APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'jardin-os-v5'; 
         
-        // Persistencia offline
-        enableIndexedDbPersistence(db).catch(err => {
-            if (err.code === 'failed-precondition') {
-                 console.warn('Persistencia falló: Múltiples pestañas abiertas.');
-            } else if (err.code === 'unimplemented') {
-                 console.warn('El navegador no soporta persistencia.');
-            }
-        });
+        enableIndexedDbPersistence(db).catch(err => console.log("Persistencia:", err.code));
 
         // ==========================================
-        // ESTADO DE LA APLICACIÓN
+        // ESTADO
         // ==========================================
         const State = {
             user: null,
@@ -345,11 +332,11 @@
             mediaRecorder: null,
             audioChunks: [],
             priority: 'low',
-            listeners: {} // Guardar las suscripciones para cancelarlas
+            listeners: {} 
         };
 
         // ==========================================
-        // GESTOR DE UI (TOASTS, MODALES, TABS)
+        // UI
         // ==========================================
         const UI = {
             toast(msg, type = 'info') {
@@ -391,12 +378,9 @@
 
             switchView(viewName) {
                 State.view = viewName;
-                
-                // Ocultar todas las secciones
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
                 document.getElementById(`view-${viewName}`).classList.remove('hidden');
                 
-                // Actualizar Tabs
                 document.querySelectorAll('.nav-tab').forEach(btn => {
                     if(btn.dataset.view === viewName) {
                         btn.classList.remove('tab-inactive');
@@ -407,15 +391,10 @@
                     }
                 });
 
-                // Manejo del FAB (Botón flotante)
                 const fab = document.getElementById('fabContainer');
-                if(viewName === 'stock' || viewName === 'chat') {
-                    fab.classList.add('translate-y-24'); // Ocultar
-                } else {
-                    fab.classList.remove('translate-y-24'); // Mostrar
-                }
+                if(viewName === 'stock' || viewName === 'chat') fab.classList.add('translate-y-24'); 
+                else fab.classList.remove('translate-y-24');
 
-                // Scroll al fondo si es chat
                 if(viewName === 'chat') UI.scrollChat();
             },
 
@@ -427,11 +406,8 @@
             openModal(modalId) {
                 const overlay = document.getElementById('modalOverlay');
                 const modal = document.getElementById(modalId);
-                
                 overlay.classList.remove('hidden');
-                // Timeout para permitir la transición CSS
                 requestAnimationFrame(() => overlay.classList.remove('opacity-0'));
-                
                 document.querySelectorAll('#modalOverlay > div').forEach(m => m.classList.add('hidden'));
                 modal.classList.remove('hidden');
                 requestAnimationFrame(() => modal.classList.remove('scale-95'));
@@ -440,10 +416,8 @@
             closeModal() {
                 const overlay = document.getElementById('modalOverlay');
                 const modals = document.querySelectorAll('#modalOverlay > div');
-                
                 overlay.classList.add('opacity-0');
                 modals.forEach(m => m.classList.add('scale-95'));
-                
                 setTimeout(() => {
                     overlay.classList.add('hidden');
                     modals.forEach(m => m.classList.add('hidden'));
@@ -452,46 +426,32 @@
         };
 
         // ==========================================
-        // SERVICIOS DE DATOS (FIRESTORE)
+        // DATA
         // ==========================================
         const Data = {
-            getBranchPath() {
-                // Rule 1 Compliance: /artifacts/{appId}/branches/{branchName}
-                // Pero guardamos 'data' dentro para seguir la estructura
-                // Estructura original del usuario: artifacts/jardin-os-v5/branches/centro/...
-                // Adaptamos a: artifacts/{PREVIEW_APP_ID}/branches/{branch}
-                return ['artifacts', PREVIEW_APP_ID, 'branches', State.branch];
-            },
-
-            getSharedPath() {
-                return ['artifacts', PREVIEW_APP_ID, 'SHARED_DATA', 'deliveries'];
-            },
+            getBranchPath() { return ['artifacts', PREVIEW_APP_ID, 'branches', State.branch]; },
+            getSharedPath() { return ['artifacts', PREVIEW_APP_ID, 'SHARED_DATA', 'deliveries']; },
 
             subscribeAll() {
-                // Limpiar anteriores
                 Object.values(State.listeners).forEach(unsub => unsub && unsub());
                 
                 const basePath = Data.getBranchPath();
                 const sharedPath = Data.getSharedPath();
 
-                // 1. TAREAS
-                const qTasks = query(collection(db, ...basePath, 'tasks'), orderBy('priority'), orderBy('createdAt', 'desc')); // Simplificamos el orden para cumplir Rule 2
-                State.listeners.tasks = onSnapshot(qTasks, (snap) => {
+                // 1. TAREAS (Sin orderBy para evitar errores de índice)
+                State.listeners.tasks = onSnapshot(collection(db, ...basePath, 'tasks'), (snap) => {
                     const list = document.getElementById('taskList');
                     list.innerHTML = '';
                     
                     if(snap.empty) {
-                        list.innerHTML = `<div class="flex flex-col items-center justify-center py-10 opacity-40">
-                            <i class="fas fa-clipboard-check text-4xl mb-3"></i>
-                            <p>Todo limpio por aquí</p>
-                        </div>`;
+                        list.innerHTML = `<div class="flex flex-col items-center justify-center py-10 opacity-40"><i class="fas fa-clipboard-check text-4xl mb-3"></i><p>Todo limpio por aquí</p></div>`;
                         return;
                     }
 
-                    // Ordenamiento manual en cliente para evitar índices complejos (Rule 2)
                     const tasks = [];
                     snap.forEach(d => tasks.push({id: d.id, ...d.data()}));
                     
+                    // Ordenamiento JS
                     const pVal = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
                     tasks.sort((a,b) => {
                         const pA = pVal[a.priority] || 3;
@@ -525,23 +485,18 @@
                     });
                 }, (err) => console.error("Error tasks", err));
 
-                // 2. REPARTOS (SHARED)
-                // Usamos un query simple para cumplir Rule 2
+                // 2. REPARTOS
                 State.listeners.deliveries = onSnapshot(collection(db, ...sharedPath), (snap) => {
                     const list = document.getElementById('deliveryList');
                     list.innerHTML = '';
-
                     const deliveries = [];
                     snap.forEach(d => deliveries.push({id: d.id, ...d.data()}));
-                    
-                    // Ordenar en memoria
                     deliveries.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
                     if(deliveries.length === 0) {
-                        list.innerHTML = `<div class="text-center p-8 opacity-40"><i class="fas fa-truck text-4xl mb-2"></i><br>Sin repartos pendientes</div>`;
+                        list.innerHTML = `<div class="text-center p-8 opacity-40"><i class="fas fa-truck text-4xl mb-2"></i><br>Sin repartos</div>`;
                         return;
                     }
-
                     deliveries.forEach(d => {
                         const isDelivered = d.status === 'delivered';
                         const el = document.createElement('div');
@@ -549,38 +504,22 @@
                         el.innerHTML = `
                             <div class="p-4">
                                 <div class="flex justify-between items-start mb-3">
-                                    <div>
-                                        <h3 class="font-bold text-slate-800 text-lg leading-none">${d.client}</h3>
-                                        <a href="tel:${d.phone}" class="text-emerald-600 text-sm font-bold flex items-center gap-1 mt-1 hover:underline"><i class="fas fa-phone-alt"></i> ${d.phone}</a>
-                                    </div>
-                                    <button onclick="window.toggleDel('${d.id}', '${d.status}')" class="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${isDelivered ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200'}">
-                                        ${isDelivered ? 'Entregado' : 'Pendiente'}
-                                    </button>
+                                    <div><h3 class="font-bold text-slate-800 text-lg leading-none">${d.client}</h3><a href="tel:${d.phone}" class="text-emerald-600 text-sm font-bold flex items-center gap-1 mt-1 hover:underline"><i class="fas fa-phone-alt"></i> ${d.phone}</a></div>
+                                    <button onclick="window.toggleDel('${d.id}', '${d.status}')" class="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border ${isDelivered ? 'bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200'}">${isDelivered ? 'Entregado' : 'Pendiente'}</button>
                                 </div>
-                                <div class="bg-amber-50 p-3 rounded-lg text-sm text-slate-700 italic border border-amber-100 mb-3 relative">
-                                    <i class="fas fa-quote-left absolute -top-2 -left-1 text-amber-200 text-xl"></i>
-                                    <span class="relative z-10">${d.items}</span>
-                                </div>
-                                <div class="flex items-center gap-4 text-xs text-slate-500">
-                                    <span class="flex items-center gap-1"><i class="far fa-clock"></i> ${d.when}</span>
-                                    <a href="https://maps.google.com/?q=${d.where}" target="_blank" class="flex items-center gap-1 text-blue-500 hover:underline"><i class="fas fa-map-marker-alt"></i> ${d.where}</a>
-                                </div>
+                                <div class="bg-amber-50 p-3 rounded-lg text-sm text-slate-700 italic border border-amber-100 mb-3 relative"><i class="fas fa-quote-left absolute -top-2 -left-1 text-amber-200 text-xl"></i><span class="relative z-10">${d.items}</span></div>
+                                <div class="flex items-center gap-4 text-xs text-slate-500"><span class="flex items-center gap-1"><i class="far fa-clock"></i> ${d.when}</span><a href="https://maps.google.com/?q=${d.where}" target="_blank" class="flex items-center gap-1 text-blue-500 hover:underline"><i class="fas fa-map-marker-alt"></i> ${d.where}</a></div>
                             </div>
-                            <div class="bg-slate-50 px-4 py-2 border-t border-slate-100 flex justify-end">
-                                <button onclick="window.delItem('deliveries','${d.id}', true)" class="text-xs text-red-400 hover:text-red-600 font-bold flex items-center gap-1">
-                                    <i class="fas fa-trash"></i> ELIMINAR
-                                </button>
-                            </div>
+                            <div class="bg-slate-50 px-4 py-2 border-t border-slate-100 flex justify-end"><button onclick="window.delItem('deliveries','${d.id}', true)" class="text-xs text-red-400 hover:text-red-600 font-bold flex items-center gap-1"><i class="fas fa-trash"></i> ELIMINAR</button></div>
                         `;
                         list.appendChild(el);
                     });
-                }, (err) => console.error("Error deliveries", err));
+                });
 
                 // 3. NOTAS
                 State.listeners.notes = onSnapshot(collection(db, ...basePath, 'notes'), (snap) => {
                     const list = document.getElementById('notesList');
                     list.innerHTML = '';
-                    
                     const notes = [];
                     snap.forEach(d => notes.push({id: d.id, ...d.data()}));
                     notes.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
@@ -589,73 +528,45 @@
                         const isBilling = n.type === 'billing';
                         const el = document.createElement('div');
                         el.className = `p-4 rounded-xl shadow-sm border relative transition-transform hover:scale-[1.01] ${isBilling ? 'bg-orange-50 border-orange-200' : 'bg-yellow-50 border-yellow-200'}`;
-                        el.innerHTML = `
-                            ${isBilling ? '<span class="absolute -top-2 left-4 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">COLA DE COBRO</span>' : ''}
-                            <p class="whitespace-pre-wrap text-slate-800 font-handwriting text-lg leading-relaxed">${n.content}</p>
-                            <button onclick="window.delItem('notes','${n.id}')" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/5 hover:bg-red-500 hover:text-white text-slate-400 flex items-center justify-center transition-colors">
-                                <i class="fas fa-times text-xs"></i>
-                            </button>
-                        `;
+                        el.innerHTML = `${isBilling ? '<span class="absolute -top-2 left-4 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">COLA DE COBRO</span>' : ''}<p class="whitespace-pre-wrap text-slate-800 font-handwriting text-lg leading-relaxed">${n.content}</p><button onclick="window.delItem('notes','${n.id}')" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/5 hover:bg-red-500 hover:text-white text-slate-400 flex items-center justify-center transition-colors"><i class="fas fa-times text-xs"></i></button>`;
                         list.appendChild(el);
                     });
-                }, (err) => console.error("Error notes", err));
+                });
 
-                // 4. CHAT
-                const qChat = query(collection(db, ...basePath, 'chat'), orderBy('createdAt', 'asc')); // Rule 2 safe? limit removed for now, or fetch all then slice
-                State.listeners.chat = onSnapshot(qChat, (snap) => {
+                // 4. CHAT (Sin orderBy)
+                State.listeners.chat = onSnapshot(collection(db, ...basePath, 'chat'), (snap) => {
                     const container = document.getElementById('chatList');
-                    
-                    // Solo procesar cambios añadidos para evitar re-render total y cortar audio
-                    snap.docChanges().forEach((change) => {
-                        if (change.type === "added") {
-                            const msg = change.doc.data();
-                            const isMe = msg.sender === State.user.uid;
-                            
-                            // Auto-play audio si es reciente y no soy yo
-                            if(msg.type === 'audio' && !isMe) {
-                                const now = Date.now();
-                                if (now - (msg.createdAt?.toMillis() || 0) < 10000) { // 10 seg ventana
-                                    new Audio(msg.url).play().catch(e => console.log("Autoplay blocked"));
-                                }
-                            }
+                    // Cargar y ordenar todos para asegurar orden correcto sin índices
+                    const msgs = [];
+                    snap.forEach(doc => msgs.push({ ...doc.data(), id: doc.id }));
+                    msgs.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
 
-                            const div = document.createElement('div');
-                            div.className = `msg-bubble ${isMe ? 'msg-me' : 'msg-other'} animate-slide-up`;
-                            
-                            let content = '';
-                            if(msg.type === 'text') content = `<p class="text-sm leading-relaxed">${msg.text}</p>`;
-                            if(msg.type === 'image') content = `<img src="${msg.url}" class="rounded-lg border border-slate-200 max-h-60 object-cover w-full" loading="lazy" onclick="window.open(this.src)">`;
-                            if(msg.type === 'audio') content = `
-                                <div class="flex items-center gap-2 min-w-[150px]">
-                                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500"><i class="fas fa-play text-xs"></i></div>
-                                    <audio controls class="h-8 w-40 max-w-full opacity-60 hover:opacity-100 transition-opacity" src="${msg.url}"></audio>
-                                </div>
-                            `;
-                            
-                            const time = msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
-                            
-                            div.innerHTML = `${content}<div class="text-[9px] text-right mt-1 opacity-50 font-bold select-none">${time}</div>`;
-                            container.appendChild(div);
-                        }
+                    // Renderizado simple
+                    container.innerHTML = '';
+                    msgs.forEach(msg => {
+                        const isMe = msg.sender === State.user.uid;
+                        const div = document.createElement('div');
+                        div.className = `msg-bubble ${isMe ? 'msg-me' : 'msg-other'} animate-slide-up`;
+                        
+                        let content = '';
+                        if(msg.type === 'text') content = `<p class="text-sm leading-relaxed">${msg.text}</p>`;
+                        if(msg.type === 'image') content = `<img src="${msg.url}" class="rounded-lg border border-slate-200 max-h-60 object-cover w-full" loading="lazy" onclick="window.open(this.src)">`;
+                        if(msg.type === 'audio') content = `<div class="flex items-center gap-2 min-w-[150px]"><div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-500"><i class="fas fa-play text-xs"></i></div><audio controls class="h-8 w-40 max-w-full opacity-60 hover:opacity-100 transition-opacity" src="${msg.url}"></audio></div>`;
+                        
+                        const time = msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...';
+                        div.innerHTML = `${content}<div class="text-[9px] text-right mt-1 opacity-50 font-bold select-none">${time}</div>`;
+                        container.appendChild(div);
                     });
                     
-                    // Solo hacer scroll si estábamos abajo o es la primera carga
+                    // Auto-scroll si es el primer load o estaba abajo
                     UI.scrollChat();
-                    
-                }, (err) => console.error("Error chat", err));
+                });
             }
         };
 
-        // ==========================================
-        // HELPERS
-        // ==========================================
+        // Helpers
         function getPriorityStyle(p) {
-            const map = {
-                critical: { border: "border-red-500", label: "Urgente" },
-                high: { border: "border-orange-500", label: "Alta" },
-                medium: { border: "border-blue-500", label: "Media" },
-                low: { border: "border-emerald-500", label: "Baja" }
-            };
+            const map = { critical: { border: "border-red-500", label: "Urgente" }, high: { border: "border-orange-500", label: "Alta" }, medium: { border: "border-blue-500", label: "Media" }, low: { border: "border-emerald-500", label: "Baja" } };
             return map[p] || map.low;
         }
 
@@ -666,59 +577,38 @@
             return await getDownloadURL(snap.ref);
         }
 
-        // ==========================================
-        // EVENT HANDLERS GLOBALES (WINDOW)
-        // ==========================================
-        
+        // Global Handlers
         window.delItem = async (collName, id, isShared = false) => {
-            if(!confirm("¿Seguro que quieres eliminar esto?")) return;
+            if(!confirm("¿Eliminar?")) return;
             const path = isShared ? Data.getSharedPath() : [...Data.getBranchPath(), collName];
-            try {
-                await deleteDoc(doc(db, ...path, id));
-                UI.toast("Eliminado correctamente");
-            } catch(e) {
-                UI.toast("Error al eliminar", "error");
-            }
+            try { await deleteDoc(doc(db, ...path, id)); UI.toast("Eliminado"); } catch(e) { UI.toast("Error", "error"); }
         };
-
         window.toggleTaskDay = async (id, currentVal) => {
-            try {
-                await updateDoc(doc(db, ...Data.getBranchPath(), 'tasks', id), { checkedDay: !currentVal });
-                // Feedback táctil visual ya está en el UI
-            } catch(e) { UI.toast("Error actualizando", "error"); }
+            try { await updateDoc(doc(db, ...Data.getBranchPath(), 'tasks', id), { checkedDay: !currentVal }); } catch(e) { UI.toast("Error", "error"); }
         };
-
         window.toggleDel = async (id, status) => {
-            const newStatus = status === 'pending' ? 'delivered' : 'pending';
-            try {
-                await updateDoc(doc(db, ...Data.getSharedPath(), id), { status: newStatus });
-            } catch(e) { UI.toast("Error actualizando", "error"); }
+            try { await updateDoc(doc(db, ...Data.getSharedPath(), id), { status: status === 'pending' ? 'delivered' : 'pending' }); } catch(e) { UI.toast("Error", "error"); }
         };
 
-        // ==========================================
-        // INICIALIZACIÓN Y EVENT LISTENERS
-        // ==========================================
-        
+        // Init
         document.addEventListener('DOMContentLoaded', async () => {
-            // Setup Fecha
             document.getElementById('currentDate').innerText = new Date().toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'short'});
-            
-            // Setup Tema Inicial
             UI.setTheme(State.branch);
 
-            // Auth Login
+            // Verificación de seguridad de config
+            if(!firebaseConfig.apiKey) {
+                alert("FALTA CONFIGURACIÓN FIREBASE:\nEdita el código y descomenta 'manualConfig' con tus credenciales.");
+                return;
+            }
+
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (error) {
-                console.error("Auth failed", error);
-                UI.toast("Error de autenticación", "error");
-            }
+            } catch (error) { console.error("Auth", error); UI.toast("Error Auth", "error"); }
 
-            // Auth Observer
             onAuthStateChanged(auth, (user) => {
                 const indicator = document.getElementById('connectionStatus');
                 if (user) {
@@ -730,12 +620,7 @@
                 }
             });
 
-            // Navegación
-            document.querySelectorAll('.nav-tab').forEach(btn => {
-                btn.addEventListener('click', () => UI.switchView(btn.dataset.view));
-            });
-
-            // Branch Switcher
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.addEventListener('click', () => UI.switchView(btn.dataset.view)));
             document.getElementById('branchBtn').addEventListener('click', () => {
                 State.branch = State.branch === 'centro' ? 'ejemplares' : 'centro';
                 localStorage.setItem('tao_branch', State.branch);
@@ -743,213 +628,105 @@
                 Data.subscribeAll();
                 UI.toast(`Cambiado a ${State.branch === 'centro' ? 'Centro' : 'Ejemplares'}`);
             });
-
-            // FAB Action
             document.getElementById('mainFab').addEventListener('click', () => {
                 if (State.view === 'tasks') UI.openModal('modal-tasks');
                 else if (State.view === 'delivery') UI.openModal('modal-delivery');
                 else if (State.view === 'notes') UI.openModal('modal-notes');
             });
-
-            // Cerrar Modales
             document.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', UI.closeModal));
-            document.getElementById('modalOverlay').addEventListener('click', (e) => {
-                if(e.target === document.getElementById('modalOverlay')) UI.closeModal();
-            });
+            document.getElementById('modalOverlay').addEventListener('click', (e) => { if(e.target === document.getElementById('modalOverlay')) UI.closeModal(); });
 
-            // --- Lógica: Tareas ---
+            // Form Handlers
             document.querySelectorAll('.prio-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.querySelectorAll('.prio-btn').forEach(b => {
-                        b.classList.remove('ring-2', 'ring-offset-1');
-                        b.style.opacity = '0.6';
-                    });
-                    btn.classList.add('ring-2', 'ring-offset-1');
-                    btn.style.opacity = '1';
-                    State.priority = btn.dataset.prio;
+                    document.querySelectorAll('.prio-btn').forEach(b => { b.classList.remove('ring-2', 'ring-offset-1'); b.style.opacity = '0.6'; });
+                    btn.classList.add('ring-2', 'ring-offset-1'); btn.style.opacity = '1'; State.priority = btn.dataset.prio;
                 });
             });
-            // Init priority selection
             document.querySelector('[data-prio="low"]').click();
 
             document.getElementById('saveTaskBtn').addEventListener('click', async () => {
                 const text = document.getElementById('taskInput').value.trim();
                 if(!text) return UI.toast("Escribe algo...", "error");
-                
                 UI.closeModal();
-                try {
-                    await addDoc(collection(db, ...Data.getBranchPath(), 'tasks'), {
-                        text,
-                        assignee: document.getElementById('taskAssignee').value.trim(),
-                        isCyclic: document.getElementById('taskCyclic').checked,
-                        priority: State.priority,
-                        checkedDay: false,
-                        checkedTotal: false,
-                        createdAt: serverTimestamp()
-                    });
-                    document.getElementById('taskInput').value = '';
-                    UI.toast("Tarea guardada", "success");
-                } catch(e) { UI.toast("Error al guardar", "error"); }
+                await addDoc(collection(db, ...Data.getBranchPath(), 'tasks'), { text, assignee: document.getElementById('taskAssignee').value.trim(), isCyclic: document.getElementById('taskCyclic').checked, priority: State.priority, checkedDay: false, checkedTotal: false, createdAt: serverTimestamp() });
+                document.getElementById('taskInput').value = '';
             });
 
-            // --- Lógica: Repartos ---
             document.getElementById('saveDelBtn').addEventListener('click', async () => {
                 const client = document.getElementById('delClient').value;
                 const items = document.getElementById('delItems').value;
-                if(!client || !items) return UI.toast("Falta Cliente o Pedido", "error");
-
+                if(!client || !items) return UI.toast("Faltan datos", "error");
                 UI.closeModal();
-                try {
-                    await addDoc(collection(db, ...Data.getSharedPath()), {
-                        client, 
-                        phone: document.getElementById('delPhone').value,
-                        items,
-                        when: document.getElementById('delWhen').value,
-                        where: document.getElementById('delWhere').value,
-                        status: 'pending',
-                        createdAt: serverTimestamp()
-                    });
-                    document.getElementById('delClient').value = '';
-                    document.getElementById('delItems').value = '';
-                    UI.toast("Reparto agendado", "success");
-                } catch(e) { UI.toast("Error al agendar", "error"); }
+                await addDoc(collection(db, ...Data.getSharedPath()), { client, phone: document.getElementById('delPhone').value, items, when: document.getElementById('delWhen').value, where: document.getElementById('delWhere').value, status: 'pending', createdAt: serverTimestamp() });
+                document.getElementById('delClient').value = ''; document.getElementById('delItems').value = '';
             });
 
-            // --- Lógica: Notas ---
             document.getElementById('saveNoteBtn').addEventListener('click', async () => {
                 const content = document.getElementById('noteContent').value.trim();
                 if(!content) return;
-                
                 UI.closeModal();
-                try {
-                    await addDoc(collection(db, ...Data.getBranchPath(), 'notes'), {
-                        content,
-                        type: document.getElementById('noteType').value,
-                        createdAt: serverTimestamp()
-                    });
-                    document.getElementById('noteContent').value = '';
-                    UI.toast("Nota pegada", "success");
-                } catch(e) { UI.toast("Error nota", "error"); }
+                await addDoc(collection(db, ...Data.getBranchPath(), 'notes'), { content, type: document.getElementById('noteType').value, createdAt: serverTimestamp() });
+                document.getElementById('noteContent').value = '';
             });
 
-            // --- Lógica: Chat (Texto) ---
-            document.getElementById('chatTextInput').addEventListener('keypress', (e) => {
-                if(e.key === 'Enter') document.getElementById('sendMsgBtn').click();
-            });
-            // Mostrar botón enviar solo si hay texto
+            // Chat handlers
+            document.getElementById('chatTextInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') document.getElementById('sendMsgBtn').click(); });
             document.getElementById('chatTextInput').addEventListener('input', (e) => {
                  const btn = document.getElementById('sendMsgBtn');
-                 if(e.target.value.trim()) btn.classList.remove('hidden');
-                 else btn.classList.add('hidden');
+                 if(e.target.value.trim()) btn.classList.remove('hidden'); else btn.classList.add('hidden');
             });
-
             document.getElementById('sendMsgBtn').addEventListener('click', async () => {
                 const input = document.getElementById('chatTextInput');
                 const text = input.value.trim();
                 if(!text) return;
-                
-                input.value = '';
-                document.getElementById('sendMsgBtn').classList.add('hidden');
-                
-                try {
-                    await addDoc(collection(db, ...Data.getBranchPath(), 'chat'), {
-                        type: 'text', text, sender: State.user.uid, createdAt: serverTimestamp()
-                    });
-                } catch(e) { UI.toast("Error enviando", "error"); }
+                input.value = ''; document.getElementById('sendMsgBtn').classList.add('hidden');
+                await addDoc(collection(db, ...Data.getBranchPath(), 'chat'), { type: 'text', text, sender: State.user.uid, createdAt: serverTimestamp() });
             });
-
-            // --- Lógica: Chat (Imagen) ---
             document.getElementById('chatImageInput').addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if(!file) return;
-                
-                UI.toast("Subiendo imagen...");
-                try {
-                    const url = await uploadFile(file, 'images');
-                    await addDoc(collection(db, ...Data.getBranchPath(), 'chat'), {
-                        type: 'image', url, sender: State.user.uid, createdAt: serverTimestamp()
-                    });
-                } catch(e) { UI.toast("Error subiendo imagen", "error"); }
+                const file = e.target.files[0]; if(!file) return;
+                UI.toast("Subiendo...");
+                try { const url = await uploadFile(file, 'images'); await addDoc(collection(db, ...Data.getBranchPath(), 'chat'), { type: 'image', url, sender: State.user.uid, createdAt: serverTimestamp() }); } catch(e) { UI.toast("Error", "error"); }
             });
 
-            // --- Lógica: Chat (Audio) ---
             const micBtn = document.getElementById('micBtn');
             const startRec = async (e) => {
-                if(e.cancelable) e.preventDefault();
-                if(State.recording) return;
-                
+                if(e.cancelable) e.preventDefault(); if(State.recording) return;
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     State.mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
                     State.audioChunks = [];
-                    
                     State.mediaRecorder.ondataavailable = event => State.audioChunks.push(event.data);
                     State.mediaRecorder.onstop = async () => {
                         const audioBlob = new Blob(State.audioChunks, { type: 'audio/webm' });
                         if(audioBlob.size > 0) {
                             UI.toast("Enviando audio...");
-                            try {
-                                const url = await uploadFile(audioBlob, 'audios');
-                                await addDoc(collection(db, ...Data.getBranchPath(), 'chat'), {
-                                    type: 'audio', url, sender: State.user.uid, createdAt: serverTimestamp()
-                                });
-                            } catch(e) { UI.toast("Error audio", "error"); }
+                            try { const url = await uploadFile(audioBlob, 'audios'); await addDoc(collection(db, ...Data.getBranchPath(), 'chat'), { type: 'audio', url, sender: State.user.uid, createdAt: serverTimestamp() }); } catch(e) { UI.toast("Error", "error"); }
                         }
                     };
-
-                    State.mediaRecorder.start();
-                    State.recording = true;
-                    micBtn.classList.add('mic-recording');
-                    document.getElementById('recordingStatus').style.opacity = '1';
-                } catch(err) {
-                    UI.toast("Permiso micrófono denegado", "error");
-                }
+                    State.mediaRecorder.start(); State.recording = true; micBtn.classList.add('mic-recording'); document.getElementById('recordingStatus').style.opacity = '1';
+                } catch(err) { UI.toast("Error Micrófono", "error"); }
             };
-
             const stopRec = (e) => {
-                if(e.cancelable) e.preventDefault();
-                if(!State.recording) return;
-                
-                if(State.mediaRecorder && State.mediaRecorder.state !== 'inactive') {
-                    State.mediaRecorder.stop();
-                    // Detener todos los tracks del stream para apagar el icono de mic del navegador
-                    State.mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                }
-                State.recording = false;
-                micBtn.classList.remove('mic-recording');
-                document.getElementById('recordingStatus').style.opacity = '0';
+                if(e.cancelable) e.preventDefault(); if(!State.recording) return;
+                if(State.mediaRecorder && State.mediaRecorder.state !== 'inactive') { State.mediaRecorder.stop(); State.mediaRecorder.stream.getTracks().forEach(track => track.stop()); }
+                State.recording = false; micBtn.classList.remove('mic-recording'); document.getElementById('recordingStatus').style.opacity = '0';
             };
+            micBtn.addEventListener('mousedown', startRec); micBtn.addEventListener('mouseup', stopRec); micBtn.addEventListener('mouseleave', stopRec); micBtn.addEventListener('touchstart', startRec); micBtn.addEventListener('touchend', stopRec);
 
-            // Eventos Touch y Mouse para el botón de micrófono
-            micBtn.addEventListener('mousedown', startRec);
-            micBtn.addEventListener('mouseup', stopRec);
-            micBtn.addEventListener('mouseleave', stopRec); // Si saca el dedo del botón
-            micBtn.addEventListener('touchstart', startRec);
-            micBtn.addEventListener('touchend', stopRec);
-
-            // --- Lógica: WakeLock ---
             document.getElementById('wakeLockBtn').addEventListener('click', async () => {
                 const btn = document.getElementById('wakeLockBtn');
                 if ('wakeLock' in navigator) {
                     try {
                         if (State.wakeLock) {
-                            await State.wakeLock.release();
-                            State.wakeLock = null;
-                            btn.classList.remove('bg-green-100', 'text-green-600', 'border-green-200');
-                            btn.classList.add('bg-slate-100', 'text-slate-500');
-                            btn.querySelector('span').innerText = "Pantalla Off";
-                            UI.toast("Pantalla normal");
+                            await State.wakeLock.release(); State.wakeLock = null;
+                            btn.classList.remove('bg-green-100', 'text-green-600', 'border-green-200'); btn.classList.add('bg-slate-100', 'text-slate-500'); btn.querySelector('span').innerText = "Pantalla Off"; UI.toast("Pantalla normal");
                         } else {
                             State.wakeLock = await navigator.wakeLock.request('screen');
-                            btn.classList.remove('bg-slate-100', 'text-slate-500');
-                            btn.classList.add('bg-green-100', 'text-green-600', 'border-green-200');
-                            btn.querySelector('span').innerText = "Pantalla Activa";
-                            UI.toast("Pantalla se mantendrá encendida");
+                            btn.classList.remove('bg-slate-100', 'text-slate-500'); btn.classList.add('bg-green-100', 'text-green-600', 'border-green-200'); btn.querySelector('span').innerText = "Pantalla Activa"; UI.toast("Pantalla se mantendrá encendida");
                         }
-                    } catch (err) { UI.toast("WakeLock error", "error"); }
-                } else {
-                    UI.toast("Navegador no compatible", "error");
-                }
+                    } catch (err) { UI.toast("Error WakeLock", "error"); }
+                } else { UI.toast("Navegador no compatible", "error"); }
             });
         });
     </script>
